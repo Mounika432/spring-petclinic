@@ -27,8 +27,15 @@ pipeline {
             steps {
                 junit testResults: 'target/surefire-reports/*.xml'
             }
-
         }
+        stage('deployment') {
+            agent { label 'JDK8' }
+            steps {
+                unstash name: 'spc-build-jar'
+                echo "clone the latest playbook"
+                sh 'ansible --version'
+            }
+        }    
     }
     post {
         success {
